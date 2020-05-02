@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp5.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -17,7 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="TerraFX.Interop.Windows" Version="0.1.0-alpha-20190714.2" />
+    <PackageReference Include="TerraFX.Interop.D3D12" Version="10.0.18362-alpha-20200421.2" />
+    <PackageReference Include="TerraFX.Interop.Windows" Version="10.0.18362-alpha-20200421.2" />
+    <PackageReference Include="TerraFX.Utilities" Version="0.1.0-alpha-20190925.1" />
   </ItemGroup>
 
 </Project>
