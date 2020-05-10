@@ -38,7 +38,8 @@ public static void RecordTextureUpload(
             ID3D12GraphicsCommandList* cmdList,
             in DdsTextureDescription textureDescription,
             out ID3D12Resource* textureBuffer,
-            out ID3D12Resource* textureBufferUploadHeap
+            out ID3D12Resource* textureBufferUploadHeap,
+            D3D12_RESOURCE_FLAGS resourceFlags = D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE
 );
 ```
 
