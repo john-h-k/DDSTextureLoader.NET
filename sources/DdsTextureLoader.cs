@@ -12,13 +12,20 @@ namespace DDSTextureLoader.NET
     /// </summary>
     public static unsafe class DdsTextureLoader
     {
+
         /// <summary>
         /// Create a DDS texture from a file
         /// </summary>
         /// <param name="fileName">The file to create from</param>
         /// <param name="mipMapMaxSize">The largest size a mipmap can be (all larger will be discarded)</param>
+        /// /// <param name="resourceFlags">The flags used during creation of the resource</param>
+        /// <param name="loaderFlags">The flags used by the loader</param>
         /// <returns>A descriptor struct of the DDS texture</returns>
-        public static DdsTextureDescription CreateDdsTexture(string fileName, uint mipMapMaxSize = default)
+        public static DdsTextureDescription CreateDdsTexture(
+            string fileName,
+            uint mipMapMaxSize = default,
+            D3D12_RESOURCE_FLAGS resourceFlags = D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE,
+            LoaderFlags loaderFlags = LoaderFlags.None)
         {
             if (fileName is null)
             {
@@ -27,16 +34,22 @@ namespace DDSTextureLoader.NET
 
             using var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
 
-            return CreateDdsTexture(stream, mipMapMaxSize);
+            return CreateDdsTexture(stream, mipMapMaxSize, resourceFlags, loaderFlags);
         }
 
         /// <summary>
-        /// Create a DDS texture from a stream
+        /// Create a DDS texture from a strean
         /// </summary>
         /// <param name="stream">The stream to create from</param>
         /// <param name="mipMapMaxSize">The largest size a mipmap can be (all larger will be discarded)</param>
-        /// <returns>A descriptor struct of the DDS texture</returns>=
-        public static DdsTextureDescription CreateDdsTexture(Stream stream, uint mipMapMaxSize = default)
+        /// <param name="resourceFlags">The flags used during creation of the resource</param>
+        /// <param name="loaderFlags">The flags used by the loader</param>
+        /// <returns>A descriptor struct of the DDS texture</returns>
+        public static DdsTextureDescription CreateDdsTexture(
+            Stream stream,
+            uint mipMapMaxSize = default,
+            D3D12_RESOURCE_FLAGS resourceFlags = D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE,
+            LoaderFlags loaderFlags = LoaderFlags.None)
         {
             if (stream is null)
             {
@@ -52,10 +65,14 @@ namespace DDSTextureLoader.NET
             byte[]? data = null;
             try
             {
-
-                data = ArrayPool<byte>.Shared.Rent((int)streamSize);
+                data = ArrayPool<byte>.Shared.Rent((int) streamSize);
                 stream.Read(data);
-                return CreateDdsTexture(data, mipMapMaxSize);
+                return CreateDdsTexture(
+                    data!,
+                    mipMapMaxSize,
+                    resourceFlags,
+                    loaderFlags
+                );
             }
             finally
             {
@@ -64,25 +81,35 @@ namespace DDSTextureLoader.NET
                     ArrayPool<byte>.Shared.Return(data);
                 }
             }
-
         }
 
         /// <summary>
         /// Create a DDS texture from memory
         /// </summary>
-        /// <param name="ddsData">The memory to create from</param>
+        /// <param name="ddsData">The memory where the DDS data is stored </param>
         /// <param name="mipMapMaxSize">The largest size a mipmap can be (all larger will be discarded)</param>
+        /// <param name="resourceFlags">The flags used during creation of the resource</param>
+        /// <param name="loaderFlags">The flags used by the loader</param>
         /// <returns>A descriptor struct of the DDS texture</returns>
-        public static DdsTextureDescription CreateDdsTexture(Memory<byte> ddsData, uint mipMapMaxSize = default)
+        public static DdsTextureDescription CreateDdsTexture(
+            Memory<byte> ddsData,
+            uint mipMapMaxSize = default,
+            D3D12_RESOURCE_FLAGS resourceFlags = D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE,
+            LoaderFlags loaderFlags = LoaderFlags.None)
         {
             if (ddsData.Length < sizeof(DdsHeader) + sizeof(uint))
             {
-               ThrowHelper.ThrowArgumentException("Data too small to be a valid DDS file");
+                ThrowHelper.ThrowArgumentException("Data too small to be a valid DDS file");
             }
 
             var metadata = FileMetadata.FromMemory(ddsData);
 
-            return ImplementationFunctions.CreateTextureFromDds12(metadata, mipMapMaxSize, forceSrgb: false);
+            return ImplementationFunctions.CreateTextureFromDds12(
+                metadata,
+                mipMapMaxSize,
+                resourceFlags,
+                loaderFlags
+            );
         }
 
         /// <summary>
@@ -105,7 +132,9 @@ namespace DDSTextureLoader.NET
                 ThrowHelper.ThrowArgumentNullException(nameof(device));
             }
 
-            DXGI_FORMAT format = textureDescription.ForceSrgb ? InteropTypeUtilities.MakeSrgb(textureDescription.Format) : textureDescription.Format;
+            DXGI_FORMAT format = textureDescription.LoaderFlags.HasFlag(LoaderFlags.ForceSrgb)
+                ? InteropTypeUtilities.MakeSrgb(textureDescription.Format)
+                : textureDescription.Format;
 
             textureBuffer = default;
             textureBufferUploadHeap = default;
@@ -115,7 +144,10 @@ namespace DDSTextureLoader.NET
             Guid iid = D3D12.IID_ID3D12Fence;
             device->CreateFence(0, D3D12_FENCE_FLAGS.D3D12_FENCE_FLAG_NONE, &iid, (void**) &fence);
 
-            // SetDebugName
+            fixed (char* pName = "ID3D12Fence")
+            {
+                fence->SetName((ushort*) pName);
+            }
 
             switch (textureDescription.ResourceDimension)
             {
@@ -134,7 +166,7 @@ namespace DDSTextureLoader.NET
                     texDesc.SampleDesc.Count = 1;
                     texDesc.SampleDesc.Quality = 0;
                     texDesc.Layout = D3D12_TEXTURE_LAYOUT.D3D12_TEXTURE_LAYOUT_UNKNOWN;
-                    texDesc.Flags = D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE;
+                    texDesc.Flags = textureDescription.ResourceFlags;
 
                     iid = D3D12.IID_ID3D12Resource;
                     var defaultHeapProperties = new D3D12_HEAP_PROPERTIES(D3D12_HEAP_TYPE.D3D12_HEAP_TYPE_DEFAULT);

@@ -18,7 +18,8 @@ namespace DDSTextureLoader.NET
             uint mipCount, 
             uint arraySize, 
             DXGI_FORMAT format, 
-            bool forceSrgb, 
+            LoaderFlags loaderFlags, 
+            D3D12_RESOURCE_FLAGS resourceFlags, 
             bool isCubeMap, 
             Memory<ManagedSubresourceData> subresourceData, 
             DDS_ALPHA_MODE alphaMode)
@@ -29,7 +30,8 @@ namespace DDSTextureLoader.NET
             MipCount = mipCount;
             ArraySize = arraySize;
             Format = format;
-            ForceSrgb = forceSrgb;
+            LoaderFlags = loaderFlags;
+            ResourceFlags = resourceFlags;
             IsCubeMap = isCubeMap;
             SubresourceData = subresourceData;
             AlphaMode = alphaMode;
@@ -78,9 +80,14 @@ namespace DDSTextureLoader.NET
         public DXGI_FORMAT Format { get; }
         
         /// <summary>
-        /// Whether SRGB should be forced
+        /// Flags used by the loader
         /// </summary>
-        public bool ForceSrgb { get; }
+        public LoaderFlags LoaderFlags { get; }
+        
+        /// <summary>
+        /// Flags used during creation of the resource used for texture upload
+        /// </summary>
+        public D3D12_RESOURCE_FLAGS ResourceFlags { get; }
         
         /// <summary>
         /// Whether the texture is a cube map
