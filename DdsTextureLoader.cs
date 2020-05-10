@@ -1,14 +1,8 @@
 ﻿using System;
 using System.Buffers;
 using System.IO;
-using System.Runtime.Intrinsics;
-using System.Runtime.Intrinsics.X86;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Win32.SafeHandles;
+using DDSTextureLoader.NET.TextureParsing;
 using TerraFX.Interop;
-using static DDSTextureLoader.NET.DDS_ALPHA_MODE;
-using static DDSTextureLoader.NET.ThrowHelper;
 using static TerraFX.Interop.D3D12_RESOURCE_DIMENSION;
 
 namespace DDSTextureLoader.NET
@@ -28,7 +22,7 @@ namespace DDSTextureLoader.NET
         {
             if (fileName is null)
             {
-                ThrowArgumentNullException(nameof(fileName));
+                ThrowHelper.ThrowArgumentNullException(nameof(fileName));
             }
 
             using var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
@@ -41,18 +35,18 @@ namespace DDSTextureLoader.NET
         /// </summary>
         /// <param name="stream">The stream to create from</param>
         /// <param name="mipMapMaxSize">The largest size a mipmap can be (all larger will be discarded)</param>
-        /// <returns>A descriptor struct of the DDS texture</returns>
+        /// <returns>A descriptor struct of the DDS texture</returns>=
         public static DdsTextureDescription CreateDdsTexture(Stream stream, uint mipMapMaxSize = default)
         {
             if (stream is null)
             {
-                ThrowArgumentNullException(nameof(stream));
+                ThrowHelper.ThrowArgumentNullException(nameof(stream));
             }
 
             var streamSize = stream.Length;
             if (streamSize > int.MaxValue)
             {
-                ThrowArgumentException("File too large");
+                ThrowHelper.ThrowArgumentException("File too large");
             }
 
             byte[]? data = null;
@@ -83,7 +77,7 @@ namespace DDSTextureLoader.NET
         {
             if (ddsData.Length < sizeof(DdsHeader) + sizeof(uint))
             {
-                ThrowArgumentException("Data too small to be a valid DDS file");
+               ThrowHelper.ThrowArgumentException("Data too small to be a valid DDS file");
             }
 
             var metadata = FileMetadata.FromMemory(ddsData);
@@ -108,7 +102,7 @@ namespace DDSTextureLoader.NET
         {
             if (device == null)
             {
-                ThrowArgumentNullException(nameof(device));
+                ThrowHelper.ThrowArgumentNullException(nameof(device));
             }
 
             DXGI_FORMAT format = textureDescription.ForceSrgb ? InteropTypeUtilities.MakeSrgb(textureDescription.Format) : textureDescription.Format;
@@ -147,7 +141,7 @@ namespace DDSTextureLoader.NET
 
                     {
                         ID3D12Resource* pTexture;
-                        ThrowIfFailed(device->CreateCommittedResource(
+                        ThrowHelper.ThrowIfFailed(device->CreateCommittedResource(
                             &defaultHeapProperties,
                             D3D12_HEAP_FLAGS.D3D12_HEAP_FLAG_NONE,
                             &texDesc,
@@ -167,7 +161,7 @@ namespace DDSTextureLoader.NET
 
                     {
                         ID3D12Resource* pTextureUploadHeap;
-                        ThrowIfFailed(device->CreateCommittedResource(
+                        ThrowHelper.ThrowIfFailed(device->CreateCommittedResource(
                             &uploadHeapProperties,
                             D3D12_HEAP_FLAGS.D3D12_HEAP_FLAG_NONE,
                             &buffer,
@@ -214,7 +208,7 @@ namespace DDSTextureLoader.NET
                 }
 
                 default:
-                    ThrowNotSupportedException("Unsupported dimension");
+                    ThrowHelper.ThrowNotSupportedException("Unsupported dimension");
                     return;
             }
         }

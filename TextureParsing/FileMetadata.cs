@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace DDSTextureLoader.NET
+namespace DDSTextureLoader.NET.TextureParsing
 {
     internal readonly unsafe ref struct FileMetadata
     {

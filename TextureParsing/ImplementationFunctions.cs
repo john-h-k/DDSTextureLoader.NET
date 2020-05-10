@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using TerraFX.Interop;
 
-namespace DDSTextureLoader.NET
+namespace DDSTextureLoader.NET.TextureParsing
 {
     internal static class ImplementationFunctions
     {

@@ -4,7 +4,7 @@ using static TerraFX.Interop.DXGI_FORMAT;
 
 #nullable enable
 
-namespace DDSTextureLoader.NET
+namespace DDSTextureLoader.NET.TextureParsing
 {
     internal readonly struct SurfaceInfo
     {

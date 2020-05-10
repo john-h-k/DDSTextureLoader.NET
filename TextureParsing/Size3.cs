@@ -1,25 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace DDSTextureLoader.NET
+namespace DDSTextureLoader.NET.TextureParsing
 {
-    internal struct Size2
-    {
-        public Size2(uint height, uint width)
-        {
-            Height = height;
-            Width = width;
-        }
-
-        public void Deconstruct(out uint height, out uint width)
-        {
-            height = Height;
-            width = Width;
-        }
-
-        public uint Height { get; set; }
-        public uint Width { get; set; }
-    }
-
     internal struct Size3
     {
         public Size3(uint height, uint width, uint depth)

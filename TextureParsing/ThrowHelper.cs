@@ -7,7 +7,7 @@ using TerraFX.Utilities;
 
 #nullable enable
 
-namespace DDSTextureLoader.NET
+namespace DDSTextureLoader.NET.TextureParsing
 {
     [DebuggerNonUserCode]
     [DebuggerStepThrough]
