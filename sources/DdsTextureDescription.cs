@@ -18,8 +18,7 @@ namespace DDSTextureLoader.NET
             uint mipCount, 
             uint arraySize, 
             DXGI_FORMAT format, 
-            LoaderFlags loaderFlags, 
-            D3D12_RESOURCE_FLAGS resourceFlags, 
+            LoaderFlags loaderFlags
             bool isCubeMap, 
             Memory<ManagedSubresourceData> subresourceData, 
             DDS_ALPHA_MODE alphaMode)
@@ -83,11 +82,6 @@ namespace DDSTextureLoader.NET
         /// Flags used by the loader
         /// </summary>
         public LoaderFlags LoaderFlags { get; }
-        
-        /// <summary>
-        /// Flags used during creation of the resource used for texture upload
-        /// </summary>
-        public D3D12_RESOURCE_FLAGS ResourceFlags { get; }
         
         /// <summary>
         /// Whether the texture is a cube map
