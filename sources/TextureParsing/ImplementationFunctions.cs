@@ -11,7 +11,6 @@ namespace DDSTextureLoader.NET.TextureParsing
         public static DdsTextureDescription CreateTextureFromDds12(
             FileMetadata metadata,
             uint maxsize,
-            D3D12_RESOURCE_FLAGS resourceFlags,
             LoaderFlags loaderFlags)
         {
             ref DdsHeader header = ref metadata.DdsHeader;
@@ -65,9 +64,18 @@ namespace DDSTextureLoader.NET.TextureParsing
                 //mipCount = Math.Min(D3D12.D3D12_REQ_MIP_LEVELS, CountMips(width, height));
             }
 
-            return new DdsTextureDescription(metadata.BitData, resDim, texSize, mipCount - skipMip, arraySize, format,
-                loaderFlags, resourceFlags,
-                isCubeMap, subresourceData, GetAlphaMode(ref metadata.DdsHeader));
+            return new DdsTextureDescription(
+                metadata.BitData, 
+                resDim, 
+                texSize, 
+                mipCount - skipMip, 
+                arraySize, 
+                format,
+                loaderFlags,
+                isCubeMap, 
+                subresourceData, 
+                GetAlphaMode(ref metadata.DdsHeader)
+            );
         }
 
         private static void ValidateD3D10ExtHeader(
