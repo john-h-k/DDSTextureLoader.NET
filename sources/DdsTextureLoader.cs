@@ -18,13 +18,11 @@ namespace DDSTextureLoader.NET
         /// </summary>
         /// <param name="fileName">The file to create from</param>
         /// <param name="mipMapMaxSize">The largest size a mipmap can be (all larger will be discarded)</param>
-        /// /// <param name="resourceFlags">The flags used during creation of the resource</param>
         /// <param name="loaderFlags">The flags used by the loader</param>
         /// <returns>A descriptor struct of the DDS texture</returns>
         public static DdsTextureDescription CreateDdsTexture(
             string fileName,
             uint mipMapMaxSize = default,
-            D3D12_RESOURCE_FLAGS resourceFlags = D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE,
             LoaderFlags loaderFlags = LoaderFlags.None)
         {
             if (fileName is null)
@@ -42,13 +40,11 @@ namespace DDSTextureLoader.NET
         /// </summary>
         /// <param name="stream">The stream to create from</param>
         /// <param name="mipMapMaxSize">The largest size a mipmap can be (all larger will be discarded)</param>
-        /// <param name="resourceFlags">The flags used during creation of the resource</param>
         /// <param name="loaderFlags">The flags used by the loader</param>
         /// <returns>A descriptor struct of the DDS texture</returns>
         public static DdsTextureDescription CreateDdsTexture(
             Stream stream,
             uint mipMapMaxSize = default,
-            D3D12_RESOURCE_FLAGS resourceFlags = D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE,
             LoaderFlags loaderFlags = LoaderFlags.None)
         {
             if (stream is null)
@@ -88,13 +84,11 @@ namespace DDSTextureLoader.NET
         /// </summary>
         /// <param name="ddsData">The memory where the DDS data is stored </param>
         /// <param name="mipMapMaxSize">The largest size a mipmap can be (all larger will be discarded)</param>
-        /// <param name="resourceFlags">The flags used during creation of the resource</param>
         /// <param name="loaderFlags">The flags used by the loader</param>
         /// <returns>A descriptor struct of the DDS texture</returns>
         public static DdsTextureDescription CreateDdsTexture(
             Memory<byte> ddsData,
             uint mipMapMaxSize = default,
-            D3D12_RESOURCE_FLAGS resourceFlags = D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE,
             LoaderFlags loaderFlags = LoaderFlags.None)
         {
             if (ddsData.Length < sizeof(DdsHeader) + sizeof(uint))
@@ -120,12 +114,14 @@ namespace DDSTextureLoader.NET
         /// <param name="textureDescription">The texture to be uploaded</param>
         /// <param name="textureBuffer">A resource buffer that will contain the uploaded texture</param>
         /// <param name="textureBufferUploadHeap">An intermediate buffer used to copy over the texture</param>
+        /// <param name="resourceFlags">Flags used in creation of the <paramref name="textureBuffer"/> resource</param>
         public static void RecordTextureUpload(
             ID3D12Device* device,
             ID3D12GraphicsCommandList* cmdList,
             in DdsTextureDescription textureDescription,
             out ID3D12Resource* textureBuffer,
-            out ID3D12Resource* textureBufferUploadHeap)
+            out ID3D12Resource* textureBufferUploadHeap,
+            D3D12_RESOURCE_FLAGS resourceFlags = D3D12_RESOURCE_FLAGS.D3D12_RESOURCE_FLAG_NONE)
         {
             if (device == null)
             {
