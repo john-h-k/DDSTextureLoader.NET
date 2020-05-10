@@ -6,7 +6,7 @@ using static TerraFX.Interop.DXGI_FORMAT;
 
 namespace DDSTextureLoader.NET
 {
-    public readonly struct SurfaceInfo
+    internal readonly struct SurfaceInfo
     {
         public SurfaceInfo(uint numBytes, uint rowBytes, uint numRows)
         {
