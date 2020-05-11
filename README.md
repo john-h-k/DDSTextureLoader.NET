@@ -28,7 +28,7 @@ public static DdsTextureDescription CreateDdsTexture(
 
 | Parameter                      | Type                         | Description                                                     |
 |--------------------------------|------------------------------|-----------------------------------------------------------------|
-| `fileName`/`stream`/`ddsData`  | `String/Stream/Memory<byte>` | The data to create the texture                                  |
+| `filename`/`stream`/`ddsData`  | `String/Stream/Memory<byte>` | The data to create the texture                                  |
 | `mipMapMaxSize`                | `UInt32`                     | The largest size a mipmap can be (all larger will be discarded) |
 | `loaderFlags`                  | `LoaderFlags`                | The flags used by the loader                                    |
 
