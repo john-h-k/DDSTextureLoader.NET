@@ -4,12 +4,14 @@ using System.IO;
 using DDSTextureLoader.NET.TextureParsing;
 using TerraFX.Interop;
 using static TerraFX.Interop.D3D12_RESOURCE_DIMENSION;
+using JetBrains.Annotations;
 
 namespace DDSTextureLoader.NET
 {
     /// <summary>
     /// The type used for loading of DDS files
     /// </summary>
+    [PublicAPI]
     public static unsafe class DdsTextureLoader
     {
 
@@ -29,10 +31,10 @@ namespace DDSTextureLoader.NET
             {
                 ThrowHelper.ThrowArgumentNullException(nameof(fileName));
             }
-
+ 
             using var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
 
-            return CreateDdsTexture(stream, mipMapMaxSize, resourceFlags, loaderFlags);
+            return CreateDdsTexture(stream, mipMapMaxSize, loaderFlags);
         }
 
         /// <summary>
@@ -66,7 +68,6 @@ namespace DDSTextureLoader.NET
                 return CreateDdsTexture(
                     data!,
                     mipMapMaxSize,
-                    resourceFlags,
                     loaderFlags
                 );
             }
@@ -101,7 +102,6 @@ namespace DDSTextureLoader.NET
             return ImplementationFunctions.CreateTextureFromDds12(
                 metadata,
                 mipMapMaxSize,
-                resourceFlags,
                 loaderFlags
             );
         }
@@ -162,7 +162,7 @@ namespace DDSTextureLoader.NET
                     texDesc.SampleDesc.Count = 1;
                     texDesc.SampleDesc.Quality = 0;
                     texDesc.Layout = D3D12_TEXTURE_LAYOUT.D3D12_TEXTURE_LAYOUT_UNKNOWN;
-                    texDesc.Flags = textureDescription.ResourceFlags;
+                    texDesc.Flags = resourceFlags;
 
                     iid = D3D12.IID_ID3D12Resource;
                     var defaultHeapProperties = new D3D12_HEAP_PROPERTIES(D3D12_HEAP_TYPE.D3D12_HEAP_TYPE_DEFAULT);

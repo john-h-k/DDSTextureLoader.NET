@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" Version="2020.1.0" />
     <PackageReference Include="TerraFX.Interop.D3D12" Version="10.0.18362-alpha-20200421.2" />
     <PackageReference Include="TerraFX.Interop.Windows" Version="10.0.18362-alpha-20200421.2" />
     <PackageReference Include="TerraFX.Utilities" Version="0.1.0-alpha-20190925.1" />

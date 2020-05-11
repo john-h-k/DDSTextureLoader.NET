@@ -1,12 +1,12 @@
 ﻿using System;
-
-#nullable enable
+using JetBrains.Annotations;
 
 namespace DDSTextureLoader.NET
 {
     /// <summary>
     /// Represents a section of data in a single resource
     /// </summary>
+    [PublicAPI]
     public readonly struct ManagedSubresourceData
     {
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.Annotations;
 using TerraFX.Interop;
 
 namespace DDSTextureLoader.NET
@@ -7,6 +8,7 @@ namespace DDSTextureLoader.NET
     /// Defines the set of flags that can be passed to the texture loader
     /// </summary>
     [Flags]
+    [PublicAPI]
     public enum LoaderFlags
     {
         /// <summary>
@@ -21,7 +23,7 @@ namespace DDSTextureLoader.NET
         ForceSrgb = 0x1,
         
         /// <summary>
-        /// Reserve space for MIPS
+        /// Reserve space for MIPs
         /// </summary>
         ReserveMips = 0x8,
     }

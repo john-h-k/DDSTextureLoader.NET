@@ -7,7 +7,7 @@ namespace DDSTextureLoader.NET.TextureParsing
 {
     internal static class InteropTypeUtilities
     {
-        public static DDS_ALPHA_MODE GetAlphaMode(ref DdsHeader header)
+        public static AlphaMode GetAlphaMode(ref DdsHeader header)
         {
             var flags = header.DdsPixelFormat.Flags;
             if (flags.HasFlag(PixelFormatFlags.DDS_FOURCC))
@@ -16,25 +16,25 @@ namespace DDSTextureLoader.NET.TextureParsing
                 {
                     ref DdsHeaderDxt10 d3d10ext =
                         ref Unsafe.As<DdsHeader, DdsHeaderDxt10>(ref Unsafe.Add(ref header, 1));
-                    var mode = (DDS_ALPHA_MODE) (d3d10ext.MiscFlags2 &
+                    var mode = (AlphaMode) (d3d10ext.MiscFlags2 &
                                                  (uint) DDS_MISC_FLAGS2.DDS_MISC_FLAGS2_ALPHA_MODE_MASK);
                     switch (mode)
                     {
-                        case DDS_ALPHA_MODE.DDS_ALPHA_MODE_STRAIGHT:
-                        case DDS_ALPHA_MODE.DDS_ALPHA_MODE_PREMULTIPLIED:
-                        case DDS_ALPHA_MODE.DDS_ALPHA_MODE_OPAQUE:
-                        case DDS_ALPHA_MODE.DDS_ALPHA_MODE_CUSTOM:
+                        case AlphaMode.Straight:
+                        case AlphaMode.Premultiplied:
+                        case AlphaMode.Opaque:
+                        case AlphaMode.Custom:
                             return mode;
                     }
                 }
                 else if ((MakeFourCC('D', 'X', 'T', '2') == header.DdsPixelFormat.FourCC)
                          || (MakeFourCC('D', 'X', 'T', '4') == header.DdsPixelFormat.FourCC))
                 {
-                    return DDS_ALPHA_MODE.DDS_ALPHA_MODE_PREMULTIPLIED;
+                    return AlphaMode.Premultiplied;
                 }
             }
 
-            return DDS_ALPHA_MODE.DDS_ALPHA_MODE_UNKNOWN;
+            return AlphaMode.Unknown;
         }
 
         public static DXGI_FORMAT MakeSrgb(DXGI_FORMAT format)

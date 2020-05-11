@@ -1,5 +1,6 @@
 ﻿using System;
 using DDSTextureLoader.NET.TextureParsing;
+using JetBrains.Annotations;
 using TerraFX.Interop;
 
 #nullable enable
@@ -9,6 +10,7 @@ namespace DDSTextureLoader.NET
     /// <summary>
     /// Represents a DDS texture that has been loaded into memory and parsed
     /// </summary>
+    [PublicAPI]
     public readonly struct DdsTextureDescription
     {
         internal DdsTextureDescription(
@@ -18,10 +20,10 @@ namespace DDSTextureLoader.NET
             uint mipCount, 
             uint arraySize, 
             DXGI_FORMAT format, 
-            LoaderFlags loaderFlags
+            LoaderFlags loaderFlags,
             bool isCubeMap, 
             Memory<ManagedSubresourceData> subresourceData, 
-            DDS_ALPHA_MODE alphaMode)
+            AlphaMode alphaMode)
         {
             BitData = bitData;
             ResourceDimension = resourceDimension;
@@ -30,7 +32,6 @@ namespace DDSTextureLoader.NET
             ArraySize = arraySize;
             Format = format;
             LoaderFlags = loaderFlags;
-            ResourceFlags = resourceFlags;
             IsCubeMap = isCubeMap;
             SubresourceData = subresourceData;
             AlphaMode = alphaMode;
@@ -96,6 +97,6 @@ namespace DDSTextureLoader.NET
         /// <summary>
         /// The alpha mode of the texture
         /// </summary>
-        public DDS_ALPHA_MODE AlphaMode { get; }
+        public AlphaMode AlphaMode { get; }
     }
 }
