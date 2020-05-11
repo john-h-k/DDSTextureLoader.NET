@@ -35,7 +35,7 @@ public static DdsTextureDescription CreateDdsTexture(
 LoaderFlags:
 * `LoaderFlags.None` - The default. No flags
 * `LoaderFlags.Srgb` - Convert the return format to the equivalent format with SRGB enabled. Note: No data conversion occurs
-* `LoaderFlags.ReserveMips` - Reserves space (but does not generate) for MIPs
+* `LoaderFlags.ReserveMips` - Reserves space for (but does not generate) MIPs
 
 
 After creation, you can inspect the read-only struct `DdsTextureDescription`.
