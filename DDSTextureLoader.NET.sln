@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29021.104
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDSTextureLoader.NET", "DDSTextureLoader.NET.csproj", "{4F39DD7A-B141-4F7E-9395-8E3FCD0159FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDSTextureLoader.NET", "sources/DDSTextureLoader.NET.csproj", "{4F39DD7A-B141-4F7E-9395-8E3FCD0159FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
